@@ -1,40 +1,58 @@
 {
   "name": "html-to-org",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Convert HTML to Org-mode format",
   "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "html",
     "org-mode",
     "org",
     "converter",
-    "emacs"
+    "emacs",
+    "orgmode"
   ],
+  "author": "zzzhizhia",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zzzhizhia/html-to-org.git"
+  },
+  "homepage": "https://github.com/zzzhizhia/html-to-org",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "tsup": "^8.0.0",
     "typescript": "^5.5.4",
-    "vitest": "^4.0.18",
-    "linkedom": "^0.18.0"
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "linkedom": "^0.18.12"
   }
 }
