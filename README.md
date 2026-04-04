@@ -2,7 +2,7 @@
 
 Convert HTML to [Org-mode](https://orgmode.org/) format.
 
-There are plenty of HTML-to-Markdown converters in the JS ecosystem. There are zero HTML-to-Org converters. This library fills that gap.
+Plenty of HTML-to-Markdown converters exist. Zero HTML-to-Org converters. This fills that gap.
 
 ## Install
 
@@ -21,53 +21,47 @@ const org = htmlToOrg('<h1>Hello</h1><p>This is <strong>bold</strong> text.</p>'
 // This is *bold* text.
 ```
 
-Pass a base URL as the second argument to resolve relative links:
+Pass a base URL to resolve relative links:
 
 ```typescript
 htmlToOrg('<a href="/about">About</a>', 'https://example.com');
 // [[https://example.com/about][About]]
 ```
 
-## What it converts
+## Conversion Table
 
 | HTML | Org-mode |
 |------|----------|
-| `<h1>` ... `<h6>` | `*` ... `******` headings |
+| `<h1>` – `<h6>` | `*` – `******` headings |
 | `<strong>`, `<b>` | `*bold*` |
 | `<em>`, `<i>` | `/italic/` |
 | `<u>` | `_underline_` |
 | `<s>`, `<del>` | `+strikethrough+` |
 | `<code>` | `=verbatim=` |
-| `<mark>` | `=highlighted=` |
 | `<sup>` | `^{superscript}` |
 | `<sub>` | `_{subscript}` |
 | `<a href="url">text</a>` | `[[url][text]]` |
 | `<img src="url">` | `[[url]]` |
-| `<ul>`, `<ol>` | `- item` / `1. item` (nested supported) |
-| `<pre><code class="language-js">` | `#+BEGIN_SRC js` ... `#+END_SRC` |
-| `<pre>` | `#+BEGIN_EXAMPLE` ... `#+END_EXAMPLE` |
-| `<blockquote>` | `#+BEGIN_QUOTE` ... `#+END_QUOTE` |
-| `<table>` | `\| col1 \| col2 \|` with alignment and header separator |
+| `<ul>`, `<ol>` | `- item` / `1. item` (nested) |
+| `<pre><code class="language-js">` | `#+BEGIN_SRC js` … `#+END_SRC` |
+| `<pre>` | `#+BEGIN_EXAMPLE` … `#+END_EXAMPLE` |
+| `<blockquote>` | `#+BEGIN_QUOTE` … `#+END_QUOTE` |
+| `<table>` | `\| col1 \| col2 \|` with header separator |
 | `<hr>` | `-----` |
 | `<br>` | newline |
 
 ## Example
 
-Input:
-
 ```html
 <h1>My Article</h1>
 <p>This is the <strong>introduction</strong> with a <a href="https://example.com">link</a>.</p>
 <h2>Section One</h2>
-<p>Some content with <code>inline code</code>.</p>
 <pre><code class="language-js">console.log("hello");</code></pre>
 <ul>
   <li>Item A</li>
   <li>Item B</li>
 </ul>
 ```
-
-Output:
 
 ```org
 * My Article
@@ -76,8 +70,6 @@ This is the *introduction* with a [[https://example.com][link]].
 
 ** Section One
 
-Some content with =inline code=.
-
 #+BEGIN_SRC js
 console.log("hello");
 #+END_SRC
@@ -85,26 +77,6 @@ console.log("hello");
 - Item A
 - Item B
 ```
-
-## How it works
-
-1. Parses HTML into a DOM tree using [linkedom](https://github.com/WebReflection/linkedom) (no browser required)
-2. Walks the tree recursively, converting each node to org syntax
-3. Collapses whitespace and normalizes blank lines
-
-No intermediate Markdown step. HTML goes directly to Org.
-
-## Edge cases handled
-
-- Strips `<script>`, `<style>`, `<noscript>` tags
-- Decodes HTML entities (`&amp;` ... `&`)
-- Collapses excessive whitespace
-- Skips whitespace-only text nodes between block elements
-- Resolves relative URLs against a base URL
-- Detects code language from `class="language-xxx"` or `class="hljs language-xxx"`
-- Aligns table columns with padding
-- Handles nested lists with proper indentation (2-space for `- `, 3-space for `1. `)
-- Works with CJK text and emoji
 
 ## API
 
@@ -115,18 +87,13 @@ No intermediate Markdown step. HTML goes directly to Org.
 | `html` | `string` | (required) | HTML string to convert |
 | `baseUrl` | `string` | `''` | Base URL for resolving relative links and images |
 
-Returns an Org-mode formatted string. Returns `''` for empty or whitespace-only input.
+Returns an Org-mode formatted string. Returns `''` for empty input.
 
-## Development
+## How It Works
 
-```bash
-pnpm install
-pnpm test          # run tests
-pnpm test:watch    # watch mode
-pnpm build         # build for publishing
-```
+Parses HTML into a DOM tree via [linkedom](https://github.com/WebReflection/linkedom) (no browser required), walks it recursively converting each node to Org syntax, then normalizes whitespace. No intermediate Markdown step.
 
-58 tests covering all supported elements, nesting, edge cases, and a full-document integration test.
+Handles: HTML entities, `<script>`/`<style>` stripping, nested lists with proper indentation, code language detection from `class="language-xxx"`, table column alignment, relative URL resolution, CJK text and emoji.
 
 ## License
 
