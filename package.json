@@ -1,6 +1,6 @@
 {
   "name": "html-to-org",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Convert HTML to Org-mode format",
   "type": "module",
   "main": "./dist/index.cjs",
