@@ -51,13 +51,13 @@
     "emacs",
     "orgmode"
   ],
-  "author": "zzzhizhia",
+  "author": "org-atelier",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zzzhizhia/html-to-org.git"
+    "url": "https://github.com/org-atelier/html-to-org.git"
   },
-  "homepage": "https://github.com/zzzhizhia/html-to-org",
+  "homepage": "https://github.com/org-atelier/html-to-org",
   "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=20"
