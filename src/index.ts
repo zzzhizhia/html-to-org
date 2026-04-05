@@ -1,7 +1,9 @@
-import { parseHTML } from 'linkedom';
-
 /**
  * Convert HTML to Org-mode format.
+ *
+ * Uses linkedom for parsing in Node.js environments.
+ * In browser environments, use `domToOrg()` with a pre-parsed DOM node
+ * to avoid bundling linkedom.
  *
  * @param html - HTML string to convert
  * @param baseUrl - Base URL for resolving relative links
@@ -10,13 +12,27 @@ import { parseHTML } from 'linkedom';
 export function htmlToOrg(html: string, baseUrl: string = ''): string {
   if (!html || !html.trim()) return '';
 
+  // Dynamic import to keep linkedom out of browser bundles when
+  // consumers use only domToOrg()
+  const { parseHTML } = require('linkedom');
   const { document } = parseHTML(`<!DOCTYPE html><html><body>${html}</body></html>`);
-  const body = document.body;
 
+  return domToOrg(document.body, baseUrl);
+}
+
+/**
+ * Convert a DOM node to Org-mode format.
+ *
+ * Works with any DOM-compatible node (browser native, linkedom, jsdom, etc.).
+ * Use this in browser environments to avoid bundling linkedom.
+ *
+ * @param node - A DOM node (Element, Document, or DocumentFragment)
+ * @param baseUrl - Base URL for resolving relative links
+ * @returns Org-mode formatted string
+ */
+export function domToOrg(node: any, baseUrl: string = ''): string {
   const ctx: ConvertContext = { baseUrl, listDepth: 0, orderedIndex: [], indentWidth: 0 };
-  const raw = convertNode(body, ctx);
-
-  // Normalize output: collapse 3+ newlines to 2, trim
+  const raw = convertNode(node, ctx);
   return raw.replace(/\n{3,}/g, '\n\n').trim();
 }
 
