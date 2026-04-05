@@ -28,6 +28,11 @@
       }
     }
   },
+  "typesVersions": {
+    "*": {
+      "dom": ["./dist/dom.d.ts"]
+    }
+  },
   "files": [
     "dist"
   ],
